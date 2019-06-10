@@ -50,9 +50,11 @@ class Quantity:
             raise ValueError("wartość musi być większa od zera!")
 
 
+# Trójkąt
 class Triangle(ConvexPolygon):
     base = Quantity()
     height = Quantity()
+    sideC = Quantity()
 
     def __init__(self, window):
         super(Triangle, self).__init__("yellow", "red")
@@ -77,30 +79,30 @@ class Triangle(ConvexPolygon):
         self.button_1.grid(row=3, column=1)
 
     def area(self):
-        return round((self.base * self.height) / 2,2)
+        return round((self.base * self.height) / 2, 2)
 
     def perimeter(self):
-        return round(self.base+self.height+self.sideC,2)
+        return round(self.base + self.height + self.sideC, 2)
 
     def draw(self):
         marginX = 100
         marginY = 200
         self.base = float(self.entry_1.get())
         self.height = float(self.entry_2.get())
-        self.sideC = math.sqrt(math.pow(self.height,2)+math.pow(self.base,2))
+        self.sideC = math.sqrt(math.pow(self.height, 2) + math.pow(self.base, 2))
         # self.tuplePoints = (
         #     marginX, marginY, self.base + marginX, marginY, (self.base / 2) + marginX, -self.height + marginY, marginX,
         #     marginY)
         self.tuplePoints = (
-            marginX,marginY,
-            marginX,marginY+self.height,
-            marginX + self.base, marginY+self.height,
+            marginX, marginY,
+            marginX, marginY + self.height,
+            marginX + self.base, marginY + self.height,
 
         )
         window.initUI(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
 
 
-# done
+# Trójkąt rownoramienny
 class IsoscelesTriangle(Triangle):
     base = Quantity()
     height = Quantity()
@@ -158,7 +160,7 @@ class IsoscelesTriangle(Triangle):
         return round(AB + BC + CA, 2)
 
 
-# done
+# Trójkąt równoboczny
 class EquilateralTriangle(Triangle):
     Sidea = Quantity()
 
@@ -187,6 +189,12 @@ class EquilateralTriangle(Triangle):
             marginX, marginY, self.base + marginX, marginY, (self.base / 2) + marginX, -self.height + marginY, marginX,
             marginY)
         window.initUI(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
+
+    def perimeter(self):
+        return self.base * 3
+
+    def area(self):
+        return (self.base * self.height) / 2
 
 
 # done
@@ -621,6 +629,7 @@ class Window(Frame):
 
         fbtn = Button(self, text="Ośmiokąt foremmny", command=RegularOctagon(self).getData)
         fbtn.grid(row=0, column=9)
+
 
 w = Tk()
 

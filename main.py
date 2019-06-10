@@ -92,6 +92,7 @@ class IsoscelesTriangle(Triangle):
 
     def getData(self):
         root = tkinter.Tk()
+
         self.label_1 = Label(root, text="podaj długość boku: ")
         self.entry_1 = Entry(root)
 
@@ -601,12 +602,6 @@ class Window(Frame):
 
         fbtn = Button(self, text="RegularOctagon", command=RegularOctagon(self).getData)
         fbtn.grid(row=0, column=8)
-
-        # zbtn = Button(self, text="Close", command=ww.initUI)
-        # zbtn.grid(row=1, column=5)
-
-
-# t_rownoramienny = IsoscelesTriangle()
 
 
 w = Tk()

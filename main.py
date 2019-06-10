@@ -54,31 +54,50 @@ class Triangle(ConvexPolygon):
     base = Quantity()
     height = Quantity()
 
-    def __init__(self):
+    def __init__(self, window):
         super(Triangle, self).__init__("yellow", "red")
         self.tuplePoints = ()
 
+    def getData(self):
+        print("Tworzenie trójkąta")
+        root = tkinter.Tk()
+        self.label_1 = Label(root, text="Podaj długość podstawy: ")
+        self.entry_1 = Entry(root)
+
+        self.label_2 = Label(root, text="Podaj wysokość:")
+        self.entry_2 = Entry(root)
+        self.button_1 = Button(root, text="Rysuj!", command=self.draw)
+
+        self.label_1.grid(row=0, column=0)
+        self.entry_1.grid(row=0, column=1)
+
+        self.label_2.grid(row=1, column=0)
+        self.entry_2.grid(row=1, column=1)
+
+        self.button_1.grid(row=3, column=1)
+
     def area(self):
-        triangleArea = math.fabs(
-            self.tuplePoints[0] * (self.tuplePoints[3] - self.tuplePoints[5]) + self.tuplePoints[2] *
-            (self.tuplePoints[5] - self.tuplePoints[1]) + self.tuplePoints[4] * (
-                    self.tuplePoints[1] - self.tuplePoints[3])) / 2
-        return round(triangleArea, 2)
+        return round((self.base * self.height) / 2,2)
 
     def perimeter(self):
-        AB = math.sqrt(
-            math.pow(self.tuplePoints[2] - self.tuplePoints[0], 2) + math.pow(self.tuplePoints[3] - self.tuplePoints[1],
-                                                                              2))
-        BC = math.sqrt(
-            math.pow(self.tuplePoints[4] - self.tuplePoints[2], 2) + math.pow(self.tuplePoints[5] - self.tuplePoints[3],
-                                                                              2))
-        CA = math.sqrt(
-            math.pow(self.tuplePoints[0] - self.tuplePoints[4], 2) + math.pow(self.tuplePoints[1] - self.tuplePoints[5],
-                                                                              2))
-        return round(AB + BC + CA, 2)
+        return round(self.base+self.height+self.sideC,2)
 
     def draw(self):
-        Window(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
+        marginX = 100
+        marginY = 200
+        self.base = float(self.entry_1.get())
+        self.height = float(self.entry_2.get())
+        self.sideC = math.sqrt(math.pow(self.height,2)+math.pow(self.base,2))
+        # self.tuplePoints = (
+        #     marginX, marginY, self.base + marginX, marginY, (self.base / 2) + marginX, -self.height + marginY, marginX,
+        #     marginY)
+        self.tuplePoints = (
+            marginX,marginY,
+            marginX,marginY+self.height,
+            marginX + self.base, marginY+self.height,
+
+        )
+        window.initUI(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
 
 
 # done
@@ -87,7 +106,7 @@ class IsoscelesTriangle(Triangle):
     height = Quantity()
 
     def __init__(self, window):
-        super(IsoscelesTriangle, self).__init__()
+        super(IsoscelesTriangle, self).__init__(window)
         self.tuplePoints = ()
 
     def getData(self):
@@ -144,7 +163,7 @@ class EquilateralTriangle(Triangle):
     Sidea = Quantity()
 
     def __init__(self, window):
-        super(EquilateralTriangle, self).__init__()
+        super(EquilateralTriangle, self).__init__(window)
 
     def getData(self):
         print("Tworzenie trójkąta równoramiennego")
@@ -564,8 +583,8 @@ class Window(Frame):
         self.pack(fill=BOTH, expand=True)
         self.canvas.create_polygon(tupleOfTops, outline=outline_colour, fill=fill_color, width=2)
         # canvas.create_line(self.tupleOfTops)
-        self.canvas.create_text(110, 10, font="italic", text=f"Area: {area}, Perimeter:{perimeter}")
-        self.canvas.grid(row=1, column=0, columnspan=6, rowspan=1, padx=0, sticky=E + W + S + N)
+        self.canvas.create_text(150, 10, font="italic", text=f"Area: {area}, Perimeter:{perimeter}")
+        self.canvas.grid(row=1, column=0, columnspan=10, rowspan=1, padx=0, sticky=E + W + S + N)
 
     def menu(self, ww):
         self.master.title("Windows")
@@ -573,36 +592,35 @@ class Window(Frame):
 
         self.columnconfigure(1, weight=1)
 
-        # abtn = Button(self, text="Triangle", command=Triangle(self).getData)
-        # abtn.grid(row=0, column=0)
+        abtn = Button(self, text="Trójkąt", command=Triangle(self).getData)
+        abtn.grid(row=0, column=0)
 
-        bbtn = Button(self, text="IsoscelesTriangle", command=IsoscelesTriangle(self).getData)
-        bbtn.grid(row=0, column=0)
+        bbtn = Button(self, text="Trójakąt rownoramienny", command=IsoscelesTriangle(self).getData)
+        bbtn.grid(row=0, column=1)
 
-        cbtn = Button(self, text="EquilateralTriangle", command=EquilateralTriangle(self).getData)
-        cbtn.grid(row=0, column=1)
-
-        cbtn = Button(self, text="Rectangle", command=Rectangle(self).getData)
+        cbtn = Button(self, text="Trójkąt równoboczny", command=EquilateralTriangle(self).getData)
         cbtn.grid(row=0, column=2)
 
-        cbtn = Button(self, text="Parallelogram", command=Parallelogram(self).getData)
+        cbtn = Button(self, text="Prostokąt", command=Rectangle(self).getData)
         cbtn.grid(row=0, column=3)
 
-        cbtn = Button(self, text="Square", command=Square(self).getData)
+        cbtn = Button(self, text="Równoległobok", command=Parallelogram(self).getData)
         cbtn.grid(row=0, column=4)
 
-        cbtn = Button(self, text="Kite", command=Kite(self).getData)
+        cbtn = Button(self, text="Kwadrat", command=Square(self).getData)
         cbtn.grid(row=0, column=5)
 
-        dbtn = Button(self, text="RegularPentagon", command=RegularPentagon(self).getData)
-        dbtn.grid(row=0, column=6)
+        cbtn = Button(self, text="Deltoid", command=Kite(self).getData)
+        cbtn.grid(row=0, column=6)
 
-        ebtn = Button(self, text="RegularHexagon", command=RegularHexagon(self).getData)
-        ebtn.grid(row=0, column=7)
+        dbtn = Button(self, text="Pięciokąt foremnny", command=RegularPentagon(self).getData)
+        dbtn.grid(row=0, column=7)
 
-        fbtn = Button(self, text="RegularOctagon", command=RegularOctagon(self).getData)
-        fbtn.grid(row=0, column=8)
+        ebtn = Button(self, text="Szcześciokąt foremmny", command=RegularHexagon(self).getData)
+        ebtn.grid(row=0, column=8)
 
+        fbtn = Button(self, text="Ośmiokąt foremmny", command=RegularOctagon(self).getData)
+        fbtn.grid(row=0, column=9)
 
 w = Tk()
 
@@ -611,5 +629,5 @@ window.menu(window)
 
 # t_rownoramienny.getData()
 
-w.geometry("900x450+200+200")
+w.geometry("940x450+200+200")
 w.mainloop()

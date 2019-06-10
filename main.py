@@ -80,25 +80,22 @@ class Triangle(ConvexPolygon):
     def draw(self):
         Window(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
 
-
+#done
 class IsoscelesTriangle(Triangle):
-    def __init__(self):
+    def __init__(self, window):
         super(IsoscelesTriangle, self).__init__()
 
 
     def getData(self):
         root = tkinter.Tk()
-        self.label_1 = Label(root, text="podaj długość podstawy: ")
+        self.label_1 = Label(root, text="podaj długość boku: ")
         self.entry_1 = Entry(root)
-        self.label_2 = Label(root, text="podaj wysokość: ")
-        self.entry_2 = Entry(root)
 
         self.button_1 = Button(root, text="Rysuj!", command=self.draw)
 
         self.label_1.grid(row=0, column=0)
         self.entry_1.grid(row=0, column=1)
-        self.label_2.grid(row=1, column=0)
-        self.entry_2.grid(row=1, column=1)
+
 
         self.button_1.grid(row=3, column=1)
 
@@ -112,68 +109,85 @@ class IsoscelesTriangle(Triangle):
         self.tuplePoints = (
             marginX, marginY, self.base + marginX, marginY, (self.base / 2) + marginX, -self.height + marginY, marginX,
             marginY)
-        w = Window(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
-        w.initUI()
+        window.initUI(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
 
 
+#done
 class EquilateralTriangle(Triangle):
-    def __init__(self):
+    Sidea = Quantity()
+    def __init__(self, window):
         super(EquilateralTriangle, self).__init__()
-        self.getData()
-        self.topCalculator()
 
     def getData(self):
         print("tworzenie trójkąta równoramiennego")
-        print("podaj długość podstawy: ")
-        b = input()
-        self.base = float()
-        self.height = (self.base * math.sqrt(3)) / 2
-        self.topCalculator()
+        root = tkinter.Tk()
+        self.label_1 = Label(root, text="podaj długość podstawy: ")
+        self.entry_1 = Entry(root)
 
+        self.button_1 = Button(root, text="Rysuj!", command=self.draw)
 
-    def topCalculator(self):
+        self.label_1.grid(row=0, column=0)
+        self.entry_1.grid(row=0, column=1)
+
+        self.button_1.grid(row=3, column=1)
+
+    def draw(self):
         marginX = 200
         marginY = 300
+        self.base = float(self.entry_1.get())
+        self.height = (self.base * math.sqrt(3)) / 2
         self.tuplePoints = (
-        marginX, marginY, self.base + marginX, marginY, (self.base / 2) + marginX, -self.height + marginY, marginX,
-        marginY)
+            marginX, marginY, self.base + marginX, marginY, (self.base / 2) + marginX, -self.height + marginY, marginX,
+            marginY)
+        window.initUI(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
 
+
+
+#done
 class RegularPentagon(ConvexPolygon):
     Side = Quantity()
-    def __init__(self):
+    def __init__(self, window):
         super(RegularPentagon,self).__init__("green", "blue")
         self.tuplePoints = ()
-        self.getData()
-        self.topCalculator()
+
 
     def area(self):
         return round(3 * (self.Side ** 2 / 4) * (1 / math.tan(math.radians(36))),2)
     def perimeter(self):
         return round(5 * self.Side,2)
     def draw(self):
-        Window(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
+        marginX = 300
+        marginY = 150
+        self.Side = float(self.entry_1.get())
+        tab = list()
+        for i in range(5):
+            x = marginX + self.Side * math.cos(math.radians(360 / 5 * i))
+            y = marginY + self.Side * math.sin(math.radians(360 / 5 * i))
+            tab.append([x, y])
+        self.tuplePoints = tuple(tab)
+        window.initUI(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
 
     def getData(self):
         print("tworzenie pięciokąta foremnego")
-        print("podaj długość boku: ")
-        self.Side = float(input())
-    def topCalculator(self):
-        marginX = 300
-        marginY = 150
-        tab = list()
-        for i in range(5):
-            x = marginX + self.Side * math.cos(math.radians(360/5 * i))
-            y = marginY + self.Side * math.sin(math.radians(360/5 * i))
-            tab.append([x,y])
-        self.tuplePoints = tuple(tab)
+        root = tkinter.Tk()
+        self.label_1 = Label(root, text="podaj długość boku: ")
+        self.entry_1 = Entry(root)
 
+        self.button_1 = Button(root, text="Rysuj!", command=self.draw)
+
+        self.label_1.grid(row=0, column=0)
+        self.entry_1.grid(row=0, column=1)
+
+        self.button_1.grid(row=3, column=1)
+
+
+#done
 class RegularHexagon(ConvexPolygon):
     Side = Quantity
-    def __init__(self):
+    def __init__(self,window):
         super(RegularHexagon,self).__init__("pink","red")
         self.tuplePoints = ()
-        self.getData()
-        self.topCalculator()
+
 
     def area(self):
         return round((3*math.pow(self.Side,2)*math.sqrt(3))/2,2)
@@ -182,30 +196,38 @@ class RegularHexagon(ConvexPolygon):
         return round(6 * self.Side, 2)
 
     def draw(self):
-        Window(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
-
-    def getData(self):
-        print("tworzenie sześciokąta foremnego")
-        print("podaj długość boku: ")
-        self.Side = float(input())
-
-    def topCalculator(self):
         marginX = 300
         marginY = 150
+        self.Side = float(self.entry_1.get())
         tab = list()
         for i in range(6):
             x = marginX + self.Side * math.cos(math.radians(360 / 6 * i))
             y = marginY + self.Side * math.sin(math.radians(360 / 6 * i))
             tab.append([x, y])
         self.tuplePoints = tuple(tab)
+        window.initUI(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
 
+    def getData(self):
+        print("tworzenie sześciokąta foremnego")
+        root = tkinter.Tk()
+        self.label_1 = Label(root, text="podaj długość boku: ")
+        self.entry_1 = Entry(root)
+
+        self.button_1 = Button(root, text="Rysuj!", command=self.draw)
+
+        self.label_1.grid(row=0, column=0)
+        self.entry_1.grid(row=0, column=1)
+
+        self.button_1.grid(row=3, column=1)
+
+
+#done
 class RegularOctagon(ConvexPolygon):
     Side = Quantity
-    def __init__(self):
+    def __init__(self, window):
         super(RegularOctagon,self).__init__("pink","red")
         self.tuplePoints = ()
-        self.getData()
-        self.topCalculator()
+
 
     def area(self):
         return round(2 * (1 + math.sqrt(2)) * math.pow(self.Side,2),2)
@@ -214,31 +236,38 @@ class RegularOctagon(ConvexPolygon):
         return round(8 * self.Side, 2)
 
     def draw(self):
-        Window(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
-
-    def getData(self):
-        print("tworzenie ośmiokąta foremnego")
-        print("podaj długość boku: ")
-        self.Side = float(input())
-
-    def topCalculator(self):
         marginX = 300
         marginY = 150
+        self.Side = float(self.entry_1.get())
         tab = list()
         for i in range(8):
             x = marginX + self.Side * math.cos(math.radians(360 / 8 * i))
             y = marginY + self.Side * math.sin(math.radians(360 / 8 * i))
             tab.append([x, y])
         self.tuplePoints = tuple(tab)
+        window.initUI(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
 
+    def getData(self):
+        print("tworzenie ośmiokąta foremnego")
+        root = tkinter.Tk()
+        self.label_1 = Label(root, text="podaj długość boku: ")
+        self.entry_1 = Entry(root)
+
+        self.button_1 = Button(root, text="Rysuj!", command=self.draw)
+
+        self.label_1.grid(row=0, column=0)
+        self.entry_1.grid(row=0, column=1)
+
+        self.button_1.grid(row=3, column=1)
+
+#done
 class Rhombus(ConvexPolygon):
     Side = Quantity()
     angle = Quantity()
-    def __init__(self):
+    def __init__(self, window):
         super(Rhombus,self).__init__("#FF337A","#33C1FF")
         self.tuplePoints = ()
-        self.getData()
-        self.topCalculator()
+
     def area(self):
         return round(math.pow(self.Side,2) * math.sin(math.radians(self.angle)),2)
 
@@ -246,29 +275,43 @@ class Rhombus(ConvexPolygon):
         return round(4*self.Side,2)
 
     def draw(self):
-        Window(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
-
-    def getData(self):
-        print("tworzenie rąbu")
-        print("podaj długość a: ")
-        self.Side = float(input())
-        print("podaj kąt α: ")
-        self.angle = float(input())
-
-    def topCalculator(self):
         marginX = 200
-        marginY = 100
-        cos = math.cos(self.angle)*self.Side
+        marginY = 150
+        self.Side = float(self.entry_1.get())
+        self.angle = float(self.entry_2.get())
+        cos = math.cos(self.angle) * self.Side
         sin = math.sin(self.angle) * self.Side
         self.tuplePoints = (marginX, marginY,
                             marginX + self.Side, marginY,
                             marginX + self.Side + cos, marginY + sin,
                             marginX + cos, marginY + sin)
+        window.initUI(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
 
+    def getData(self):
+        print("tworzenie rąbu")
+        root = tkinter.Tk()
+        self.label_1 = Label(root, text="podaj długość a: ")
+        self.entry_1 = Entry(root)
+
+        self.label_2 = Label(root, text="podaj kąt α:: ")
+        self.entry_2 = Entry(root)
+
+        self.button_1 = Button(root, text="Rysuj!", command=self.draw)
+
+        self.label_1.grid(row=0, column=0)
+        self.entry_1.grid(row=0, column=1)
+
+        self.label_2.grid(row=1, column=0)
+        self.entry_2.grid(row=1, column=1)
+
+
+        self.button_1.grid(row=3, column=1)
+
+#done
 class Square(Rhombus):
     Side = Quantity()
-    def __init__(self):
-        super(Square, self).__init__()
+    def __init__(self, window):
+        super(Square, self).__init__(window)
 
 
     def area(self):
@@ -278,28 +321,35 @@ class Square(Rhombus):
         return round(4 * self.Side, 2)
 
     def draw(self):
-        Window(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
-    def getData(self):
-        print("tworzenie kwadratu")
-        print("podaj długość boku a: ")
-        a = input()
-        self.Side = float(a)
-
-    def topCalculator(self):
         marginX = 150
         marginY = 250
+        self.Side = float(self.entry_1.get())
         self.tuplePoints = (marginX, marginY,
                             self.Side + marginX, marginY,
                             marginX + self.Side, marginY - self.Side, marginX,
                             marginY - self.Side, marginX, marginY)
+        window.initUI(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
+    def getData(self):
+        print("tworzenie kwadratu")
+        root = tkinter.Tk()
+        self.label_1 = Label(root, text="podaj długość boku a: ")
+        self.entry_1 = Entry(root)
 
+        self.button_1 = Button(root, text="Rysuj!", command=self.draw)
+
+        self.label_1.grid(row=0, column=0)
+        self.entry_1.grid(row=0, column=1)
+
+        self.button_1.grid(row=3, column=1)
+
+#done
 #rownoleglobok
 class Parallelogram(Rhombus):
     SideA = Quantity()
     SideB = Quantity()
     angle = Quantity()
-    def __init__(self):
-        super(Parallelogram, self).__init__()
+    def __init__(self,window):
+        super(Parallelogram, self).__init__(window)
 
     def perimeter(self):
         return 2 * self.SideA + 2 * self.SideB
@@ -308,34 +358,55 @@ class Parallelogram(Rhombus):
         return round(self.SideA * self.SideB * math.sin(math.radians(self.angle)),2)
 
     def draw(self):
-        Window(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
-
-    def getData(self):
-        print("tworzenie równoległoboku")
-        print("podaj długość boku a: ")
-        self.SideA = float(input())
-        print("podaj długość boku b:")
-        self.SideB = float(input())
-        print("podaj kąt a:")
-        self.angle = float(input())
-    def topCalculator(self):
         marginX = 50
         marginY = 100
-
+        self.SideA = float(self.entry_1.get())
+        self.SideB = float(self.entry_2.get())
+        self.angle = float(self.entry_3.get())
         a_cos = math.cos(math.radians(self.angle)) * self.SideA
         b_sin = math.sin(math.radians(self.angle)) * self.SideB
 
         self.tuplePoints = (marginX, marginY,
-            marginX + self.SideA + self.SideB, marginY,
-            marginX + self.SideA + a_cos + self.SideB, marginY + b_sin,
-            marginX + a_cos, marginY + b_sin)
+                            marginX + self.SideA + self.SideB, marginY,
+                            marginX + self.SideA + a_cos + self.SideB, marginY + b_sin,
+                            marginX + a_cos, marginY + b_sin)
+        window.initUI(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
 
+
+    def getData(self):
+        print("tworzenie równoległoboku")
+
+        root = tkinter.Tk()
+        self.label_1 = Label(root, text="podaj długość boku a: ")
+        self.entry_1 = Entry(root)
+
+        self.label_2 = Label(root, text="podaj długość boku b: ")
+        self.entry_2 = Entry(root)
+
+        self.label_3 = Label(root, text="podaj kąt α")
+        self.entry_3 = Entry(root)
+
+        self.button_1 = Button(root, text="Rysuj!", command=self.draw)
+
+        self.label_1.grid(row=0, column=0)
+        self.entry_1.grid(row=0, column=1)
+
+        self.label_2.grid(row=1, column=0)
+        self.entry_2.grid(row=1, column=1)
+
+        self.label_3.grid(row=2, column=0)
+        self.entry_3.grid(row=2, column=1)
+
+        self.button_1.grid(row=3, column=1)
+
+
+#done
 #kwadrat
 class Rectangle(Parallelogram):
     SideA = Quantity()
     SideB = Quantity()
-    def __init__(self):
-        super(Rectangle, self).__init__()
+    def __init__(self,window):
+        super(Rectangle, self).__init__(window)
 
     def perimeter(self):
         return 2 * self.SideA + 2 * self.SideB
@@ -344,24 +415,37 @@ class Rectangle(Parallelogram):
         return self.SideA * self.SideB
 
     def draw(self):
-        Window(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
+        marginX = 150
+        marginY = 100
+        self.SideA = float(self.entry_1.get())
+        self.SideB = float(self.entry_2.get())
+        self.tuplePoints = (marginX, marginY,
+                            marginX + self.SideA, marginY,
+                            marginX + self.SideA, marginY + self.SideB,
+                            marginX, marginY + self.SideB
+                            )
+        window.initUI(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
 
     def getData(self):
         print("tworzenie prostokąta")
-        print("podaj długość boku a: ")
-        self.SideA = float(input())
-        print("podaj długość boku b:")
-        self.SideB = float(input())
 
-    def topCalculator(self):
-        marginX = 150
-        marginY = 100
+        root = tkinter.Tk()
+        self.label_1 = Label(root, text="podaj długość a: ")
+        self.entry_1 = Entry(root)
 
-        self.tuplePoints = (marginX, marginY,
-            marginX + self.SideA, marginY,
-            marginX + self.SideA, marginY + self.SideB,
-            marginX, marginY + self.SideB
-                            )
+        self.label_2 = Label(root, text="podaj długość boku b: ")
+        self.entry_2 = Entry(root)
+
+        self.button_1 = Button(root, text="Rysuj!", command=self.draw)
+
+        self.label_1.grid(row=0, column=0)
+        self.entry_1.grid(row=0, column=1)
+
+        self.label_2.grid(row=1, column=0)
+        self.entry_2.grid(row=1, column=1)
+
+        self.button_1.grid(row=3, column=1)
+
 
 # deltoid
 class Kite(ConvexPolygon):
@@ -371,11 +455,10 @@ class Kite(ConvexPolygon):
     p = Quantity()
     SideA = Quantity()
     SideB = Quantity()
-    def __init__(self):
+    def __init__(self,window):
         super(Kite, self).__init__("red","black")
         self.tuplePoints = ()
-        self.getData()
-        self.topCalculator()
+
     def perimeter(self):
         return round(2*self.SideA+2*self.SideB,2)
 
@@ -383,33 +466,55 @@ class Kite(ConvexPolygon):
         return round(self.p*self.Side/2,2)
 
     def draw(self):
-        Window(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
-
-    def getData(self):
-        print("tworzenie deltoidu")
-        print("podaj długość przekątnej: ")
-        self.Side = float(input())
-        print("podja kąt a: ")
-        self.angleA = float(input())
-        print("podja kąt b: ")
-        self.angleB = float(input())
-    def topCalculator(self):
         marginX = 200
         marginY = 100
-        angleAhalf = self.angleA/2
-        angleBhalf = self.angleB/2
-        a = 1/math.sin(math.radians(angleAhalf)) * (self.Side/2)
-        b = 1/math.sin(math.radians(angleBhalf)) * (self.Side/2)
+        self.Side = float(self.entry_1.get())
+        self.angleA = float(self.entry_2.get())
+        self.angleB = float(self.entry_3.get())
+
+        angleAhalf = self.angleA / 2
+        angleBhalf = self.angleB / 2
+        a = 1 / math.sin(math.radians(angleAhalf)) * (self.Side / 2)
+        b = 1 / math.sin(math.radians(angleBhalf)) * (self.Side / 2)
         x = math.cos(math.radians(angleAhalf)) * a
-        y = 1/math.tan(math.radians(angleBhalf)) * (self.Side/2)
+        y = 1 / math.tan(math.radians(angleBhalf)) * (self.Side / 2)
         self.p = x + y
         self.SideA = a
         self.SideB = b
         self.tuplePoints = (marginX, marginY,
-                            marginX + (self.Side/2), marginY + x,
+                            marginX + (self.Side / 2), marginY + x,
                             marginX, marginY + y,
-                            marginX - (self.Side/2), marginY + x,
+                            marginX - (self.Side / 2), marginY + x,
                             )
+        window.initUI(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
+
+    def getData(self):
+        print("tworzenie deltoidu")
+
+
+        root = tkinter.Tk()
+        self.label_1 = Label(root, text="podaj długość przekątnej: ")
+        self.entry_1 = Entry(root)
+
+        self.label_2 = Label(root, text="podja kąt α: ")
+        self.entry_2 = Entry(root)
+
+        self.label_3 = Label(root, text="podaj kąt b")
+        self.entry_3 = Entry(root)
+
+        self.button_1 = Button(root, text="Rysuj!", command=self.draw)
+
+        self.label_1.grid(row=0, column=0)
+        self.entry_1.grid(row=0, column=1)
+
+        self.label_2.grid(row=1, column=0)
+        self.entry_2.grid(row=1, column=1)
+
+        self.label_3.grid(row=2, column=0)
+        self.entry_3.grid(row=2, column=1)
+
+        self.button_1.grid(row=3, column=1)
+
 
 
 class Window(Frame):
@@ -421,8 +526,8 @@ class Window(Frame):
 
     def initUI(self, tupleOfTops, fill_color, outline_colour, area, perimeter):
 
+        self.canvas.delete(ALL)
         frame = Frame(self.canvas, bg='purple')
-
         self.canvas.create_window((0, 0), window=frame, anchor=NW)
 
         self.pack(fill=BOTH, expand=True)
@@ -431,20 +536,21 @@ class Window(Frame):
         self.canvas.create_text(110, 10, font="italic", text=f"Area: {area}, Perimeter:{perimeter}")
         self.canvas.grid(row=1, column=0, columnspan=2, rowspan=1,padx=0, sticky=E + W + S + N)
 
+
     def menu(self,ww):
         self.master.title("Windows")
         self.pack(fill=BOTH, expand=True)
 
         self.columnconfigure(1, weight=1)
 
-        abtn = Button(self, text="Activate", command=IsoscelesTriangle().getData)
+        abtn = Button(self, text="Activate", command=Kite(self).getData)
         abtn.grid(row=1, column=3)
 
         cbtn = Button(self, text="Close", command=ww.initUI)
         cbtn.grid(row=2, column=3, pady=4)
 
 
-t_rownoramienny = IsoscelesTriangle()
+# t_rownoramienny = IsoscelesTriangle()
 
 
 w = Tk()

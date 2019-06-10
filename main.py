@@ -82,20 +82,27 @@ class Triangle(ConvexPolygon):
 
 #done
 class IsoscelesTriangle(Triangle):
+    base = Quantity()
+    height = Quantity()
     def __init__(self, window):
         super(IsoscelesTriangle, self).__init__()
-
+        self.tuplePoints = ()
 
     def getData(self):
         root = tkinter.Tk()
         self.label_1 = Label(root, text="podaj długość boku: ")
         self.entry_1 = Entry(root)
 
+        self.label_2 = Label(root, text="podaj długość wysokości: ")
+        self.entry_2 = Entry(root)
+
         self.button_1 = Button(root, text="Rysuj!", command=self.draw)
 
         self.label_1.grid(row=0, column=0)
         self.entry_1.grid(row=0, column=1)
 
+        self.label_2.grid(row=1, column=0)
+        self.entry_2.grid(row=1, column=1)
 
         self.button_1.grid(row=3, column=1)
 
@@ -103,13 +110,30 @@ class IsoscelesTriangle(Triangle):
     def draw(self):
         marginX = 100
         marginY = 200
-        self.height = float(self.entry_1.get())
-        self.base = float(self.entry_2.get())
-
+        self.base = float(self.entry_1.get())
+        self.height = float(self.entry_2.get())
         self.tuplePoints = (
             marginX, marginY, self.base + marginX, marginY, (self.base / 2) + marginX, -self.height + marginY, marginX,
             marginY)
         window.initUI(self.tuplePoints, self.fill_colour, self.otuline_colour, self.area(), self.perimeter())
+    def area(self):
+        triangleArea = math.fabs(
+            self.tuplePoints[0] * (self.tuplePoints[3] - self.tuplePoints[5]) + self.tuplePoints[2] *
+            (self.tuplePoints[5] - self.tuplePoints[1]) + self.tuplePoints[4] * (
+                        self.tuplePoints[1] - self.tuplePoints[3])) / 2
+        return round(triangleArea, 2)
+
+    def perimeter(self):
+        AB = math.sqrt(
+            math.pow(self.tuplePoints[2] - self.tuplePoints[0], 2) + math.pow(self.tuplePoints[3] - self.tuplePoints[1],
+                                                                              2))
+        BC = math.sqrt(
+            math.pow(self.tuplePoints[4] - self.tuplePoints[2], 2) + math.pow(self.tuplePoints[5] - self.tuplePoints[3],
+                                                                              2))
+        CA = math.sqrt(
+            math.pow(self.tuplePoints[0] - self.tuplePoints[4], 2) + math.pow(self.tuplePoints[1] - self.tuplePoints[5],
+                                                                              2))
+        return round(AB + BC + CA, 2)
 
 
 #done
@@ -543,7 +567,7 @@ class Window(Frame):
 
         self.columnconfigure(1, weight=1)
 
-        abtn = Button(self, text="Activate", command=Kite(self).getData)
+        abtn = Button(self, text="Activate", command=IsoscelesTriangle(self).getData)
         abtn.grid(row=1, column=3)
 
         cbtn = Button(self, text="Close", command=ww.initUI)
